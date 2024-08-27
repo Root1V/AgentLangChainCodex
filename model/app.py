@@ -34,6 +34,12 @@ def clear_history():
         open(historyFile, "w").close()
 
 
+def download_file():
+    with open(historyFile, "r") as f:
+        file_contents = f.read()
+    return file_contents
+
+
 def agen_run(agent_executor, user_input):
     answer = agent_executor.invoke(input={"input": user_input})
     st.markdown("### Respuesta del Agente AI")
@@ -105,7 +111,12 @@ def main():
     with col2:
         clean = st.button("Limpiar historial", key="clear_button")
     with col3:
-        save = st.button("Guardar historial", key="save_button")
+        download = st.download_button(
+            "Descargar historial",
+            key="down_button",
+            data=download_file(),
+            file_name="full_history.txt",
+        )
 
     if exec:
         if user_input:
@@ -115,6 +126,9 @@ def main():
 
     if clean:
         clear_history()
+
+    if download:
+        st.write("Descarga exitosa...")
 
     st.markdown("### Hostorial de consultas")
     history = load_history()
