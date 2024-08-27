@@ -1,0 +1,11 @@
+2024-08-27 08:52:54.578809: Crea una funcion que calcule el factorial del numero -> def factorial(n):
+    if n < 0:
+        raise ValueError("El factorial no está definido para números negativos.")
+    elif n == 0 or n == 1:
+        return 1
+    else:
+        result = 1
+        for i in range(2, n + 1):
+            result *= i
+        return result
+```
