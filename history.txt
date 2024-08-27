@@ -9,3 +9,30 @@
             result *= i
         return result
 ```
+2024-08-27 09:01:42.843830: Dame una función para jugar al juego de la vida -> def juego_de_la_vida(tablero, generaciones):
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def actualizar_tablero(tablero):
+        vecinos = np.zeros(tablero.shape)
+        for i in range(tablero.shape[0]):
+            for j in range(tablero.shape[1]):
+                vecinos[i, j] = np.sum(tablero[max(0, i-1):min(i+2, tablero.shape[0]),
+                                                max(0, j-1):min(j+2, tablero.shape[1])]) - tablero[i, j]
+
+        nuevo_tablero = (vecinos == 3) | (tablero & (vecinos == 2))
+        return nuevo_tablero.astype(int)
+
+    for _ in range(generaciones):
+        plt.imshow(tablero, cmap='binary')
+        plt.pause(0.1)
+        tablero = actualizar_tablero(tablero)
+
+    plt.show()
+
+# Ejemplo de uso
+tablero_inicial = np.random.choice([0, 1], size=(10, 10), p=[0.7, 0.3])
+juego_de_la_vida(tablero_inicial, 50)
+```
+2024-08-27 09:02:13.435655: Calcula el factorial del numero 19 -> 121645100408832000
+```

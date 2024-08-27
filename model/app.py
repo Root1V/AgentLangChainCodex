@@ -99,11 +99,13 @@ def main():
         "Introduce tu pregunta para el agente:", key="input_text"
     )
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         exec = st.button("Ejecutar", key="exec_button")
     with col2:
         clean = st.button("Limpiar historial", key="clear_button")
+    with col3:
+        save = st.button("Guardar historial", key="save_button")
 
     if exec:
         if user_input:
@@ -113,6 +115,14 @@ def main():
 
     if clean:
         clear_history()
+
+    st.markdown("### Hostorial de consultas")
+    history = load_history()
+    if history:
+        for h in history:
+            st.text(h)
+    else:
+        st.write("No hay historial....")
 
 
 if __name__ == "__main__":
