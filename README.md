@@ -16,8 +16,6 @@ file: `.env`
 
 Para ejecutar la aplicación, simplemente usa el siguiente comando:
 
-\\\`\\\`\\\`bash
-python model/app.py
-\\\`\\\`\\\`
-
-EOF
+```bash
+streamlit run main.py
+```
