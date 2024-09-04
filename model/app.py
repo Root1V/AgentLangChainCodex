@@ -10,41 +10,91 @@ from model.config import Config
 
 
 class App:
+    """
+    Clase que representa la aplicación de un agente de inteligencia artificial
+    diseñado para responder preguntas sobre programación utilizando código Python.
+    """
+
     def __init__(self) -> None:
+        """
+        Inicializa la aplicación cargando la configuración y definiendo el archivo
+        donde se guardará el historial de interacciones.
+
+        Attributes:
+            config (dict): Configuración cargada desde el archivo de configuración.
+            historyFile (str): Nombre del archivo que almacena el historial de preguntas y respuestas.
+        """
         self.config = Config.get_all()
         self.historyFile = "history.txt"
 
     def save_history(self, question, answer):
+        """
+        Guarda una pregunta y su respuesta en el historial.
+
+        Args:
+            question (str): La pregunta realizada al agente.
+            answer (str): La respuesta proporcionada por el agente.
+        """
         with open(self.historyFile, "a") as h:
             h.write(f"{datetime.datetime.now()}: {question} -> {answer}\n")
 
     def load_history(self):
+        """
+        Carga el historial de preguntas y respuestas desde el archivo.
+
+        Returns:
+            list: Una lista de las líneas del historial. Si el archivo no existe,
+            devuelve una lista vacía.
+        """
         if os.path.exists(self.historyFile):
             with open(self.historyFile, "r") as h:
                 return h.readlines()
         return []
 
     def clear_history(self):
+        """
+        Limpia el historial de preguntas y respuestas, vaciando el archivo correspondiente.
+        """
         if os.path.exists(self.historyFile):
             open(self.historyFile, "w").close()
 
     def download_file(self):
+        """
+        Lee el contenido del archivo de historial y lo devuelve.
+
+        Returns:
+            str: Contenido del archivo de historial.
+        """
         with open(self.historyFile, "r") as f:
             file_contents = f.read()
         return file_contents
 
     def agen_run(self, agent_executor, user_input):
+        """
+        Ejecuta el agente con la entrada del usuario, muestra la respuesta y guarda
+        la interacción en el historial.
+
+        Args:
+            agent_executor (AgentExecutor): El ejecutor del agente que procesa la entrada.
+            user_input (str): La entrada proporcionada por el usuario.
+        """
         answer = agent_executor.invoke(input={"input": user_input})
         st.markdown("### Respuesta del Agente AI")
         st.code(answer["output"], language="python")
         self.save_history(user_input, answer["output"])
 
     def run(self):
+        """
+        Configura y ejecuta la interfaz de usuario de la aplicación utilizando Streamlit.
+        Carga el prompt del agente, configura los botones y maneja las interacciones del usuario.
+        """
+
         st.set_page_config(
             page_title="Agente AI para Codigo de Programación",
             page_icon="",
             layout="wide",
         )
+
         st.title("Agent AI Codex")
         st.markdown(
             """
@@ -78,11 +128,11 @@ class App:
             model=self.config["model"], temperature=self.config["temperature"]
         )
 
-        # creamos el agente
+        # Crear el agente
         agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
         agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-        # Run con ejemplos
+        # Ejecutar con ejemplos
         st.markdown("### Ejemplos:")
         examples = [
             "Calcula la division de 1234/5678",
@@ -126,7 +176,7 @@ class App:
         if download:
             st.write("Descarga exitosa...")
 
-        st.markdown("### Hostorial de consultas")
+        st.markdown("### Historial de consultas")
         history = self.load_history()
         if history:
             for h in history:

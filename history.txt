@@ -42,3 +42,5 @@ juego_de_la_vida(tablero_inicial, 50)
 ```
 2024-09-03 21:42:24.467034: Calcula la division de 1234/5678 -> 0.1735632183908046
 ```
+2024-09-04 15:32:59.634689: Calcula el factorial del numero 19 -> 121645100408832000
+```
